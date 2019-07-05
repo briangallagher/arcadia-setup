@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: pipeline-bc-from-git-template
+metadata:
+  annotations:
+    description: Template for creating a BuildConfig to run a Jenkins pipeline from Git.
+  name: pipeline-bc-from-git-template
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: ${BUILDCONFIG_NAME}
+    labels:
+      app: ${APP_NAME}
+  spec:
+    source:
+      type: "Git"
+      git:
+        uri: "https://github.com/briangallagher/orders-poller.git"
+
+    strategy:
+      type: JenkinsPipeline
+      jenkinsPipelineStrategy:
+        env:
+        - name: GIT_URL
+          value: ${GIT_URL}
+        - name: GIT_BRANCH
+          value: ${GIT_BRANCH}
+        - name: PROJECT
+          value: ${PROJECT}
+        - name: APP_NAME
+          value: ${APP_NAME}
+        jenkinsfilePath: Jenkinsfile
+parameters:
+- name: PROJECT
+  description: Project that the apps belong to
+  required: true
+- name: APP_NAME
+  description: The application name
+  required: true
+- name: GIT_URL
+  displayname: Git repository url
+  description: Git repository url
+  required: true
+- name: GIT_BRANCH
+  description: Git branch name
+  required: true
+  value: master
+- name: BUILDCONFIG_NAME
+  description: The name of the Pipeline BuildConfig
+  required: true
+  value: arcadia-pipeline
+
+

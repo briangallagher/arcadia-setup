@@ -1,0 +1,5 @@
+Git clone (also, try to add triggers)
+Set version 
+Build Code
+Code Testing
+Build Image
